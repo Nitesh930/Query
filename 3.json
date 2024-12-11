@@ -1,0 +1,26 @@
+{
+  "aggregate": "movies",
+  "pipeline": [
+    {
+      "$group": {
+        "_id": "$title",
+        "imdbRating": { "$avg": "$imdb.rating" },
+        "commentCount": { "$sum": { "$size": { "$ifNull": ["$comments", []] } } }
+      }
+    },
+    {
+      "$sort": { "imdbRating": -1 }
+    },
+    {
+      "$limit": 5
+    },
+    {
+      "$project": {
+        "title": "$_id",
+        "imdbRating": 1,
+        "commentCount": 1,
+        "_id": 0
+      }
+    }
+  ]
+}
