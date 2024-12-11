@@ -1,0 +1,34 @@
+[
+  {
+    "$lookup": {
+      "from": "comments",
+      "localField": "_id",
+      "foreignField": "movie_id",
+      "as": "comments"
+    }
+  },
+  {
+    "$match": {
+      "year": { "$lt": 1950 },
+      "imdb.rating": { "$gte": 7.0 }
+    }
+  },
+  {
+    "$project": {
+      "title": 1,
+      "releaseYear": "$year",
+      "genres": 1,
+      "imdbRating": "$imdb.rating",
+      "comments": {
+        "$map": {
+          "input": "$comments",
+          "as": "comment",
+          "in": {
+            "name": "$$comment.name",
+            "text": "$$comment.text"
+          }
+        }
+      }
+    }
+  }
+]
