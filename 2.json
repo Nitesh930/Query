@@ -1,0 +1,16 @@
+[
+  {
+    "$lookup": {
+      "from": "comments",
+      "localField": "_id",
+      "foreignField": "movie_id",
+      "as": "comments"
+    }
+  },
+  {
+    "$project": {
+      "title": 1,
+      "commentCount": { "$size": "$comments" }
+    }
+  }
+]
